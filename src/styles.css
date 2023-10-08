@@ -1,0 +1,278 @@
+:root {
+  --dark-house: #442f14;
+  --dark-house-over: rgb(65, 44, 19);
+  --light-house: #eac696;
+  --light-house-over: rgb(243, 218, 185);
+}
+
+body {
+  font-family: sans-serif;
+  overflow: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#app {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: #fff6dc;
+}
+
+.eaten-pieces.container {
+  position: absolute;
+  left: 2rem;
+}
+
+.timer {
+  font-size: 2rem;
+}
+
+.board {
+  position: relative;
+  background-color: #c8ae7d;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  height: 40rem;
+  width: 40rem;
+  border-radius: 1rem;
+  border: 0.5rem solid #c8ae7d;
+  overflow: hidden;
+  box-sizing: content-box;
+}
+
+.eaten.container {
+  background-color: var(--dark-house);
+}
+
+.cpu-overlay {
+  z-index: 50;
+  position: fixed;
+  height: 40rem;
+  width: 40rem;
+  display: flex;
+  background-color: #00000080;
+  align-items: center;
+  justify-content: center;
+  animation: fade-in 0.2s linear;
+}
+
+.cpu-btn {
+  background-color: #352f44;
+  color: white;
+  height: 2.5rem;
+  padding-inline: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.moves.container {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  background-color: var(--dark-house);
+  padding: 4rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: flex-start;
+  width: 24rem;
+  height: 100vh;
+  transition: all ease 0.2s;
+}
+
+.moves.container.closed {
+  width: 0;
+  padding: 0;
+}
+
+.moves.container.closed span {
+  opacity: 0;
+  transform: translate(0, 24rem);
+}
+
+.moves.container button {
+  position: fixed;
+  z-index: 25;
+  top: 1rem;
+  right: 1rem;
+  background-color: #352f44;
+  border: none;
+  height: 2.5rem;
+  padding-inline: 0.75rem;
+  font-size: 0.975rem;
+  color: var(--light-house);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.moves.container button:hover {
+  background-color: #5c5470;
+}
+
+.timer-container {
+  display: flex;
+  flex-direction: colunm;
+  gap: 1rem;
+  position: absolute;
+  bottom: 2rem;
+}
+
+.white-move {
+  color: white;
+}
+
+.board-overlay {
+  position: absolute;
+  background-color: #00000000;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  transition: all ease 0.2s;
+  pointer-events: none;
+  user-select: none;
+}
+
+#app:has(.piece:focus) .board-overlay {
+  background-color: #000000aa;
+}
+
+.cell {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--light-house);
+  transition: all ease 0.5s;
+  box-shadow: 0px 0px 4px 2px #ffe17b00;
+}
+
+.cell.active {
+  z-index: 9;
+  background-color: #adc078;
+}
+
+.cell.active:hover {
+  filter: brightness(0.8);
+  cursor: pointer;
+}
+
+/* .cell:hover:not(.active) {
+  z-index: 5;
+  background-color: var(--light-house-over);
+  box-shadow: 0px 0px 4px 2px #ffe17b;
+} */
+
+.cell.odd {
+  background-color: var(--dark-house);
+}
+
+.cell.odd.active {
+  z-index: 15;
+  background-color: #1c2211;
+}
+
+.cell.enemy {
+  z-index: 15;
+  cursor: pointer;
+  background-color: #c07a76;
+}
+
+.cell.enemy button {
+  user-select: none;
+  pointer-events: none;
+}
+
+.cell.odd.enemy {
+  z-index: 15;
+  background-color: #421a18;
+}
+
+.cell.odd .cell.odd:hover:not(.active) {
+  background-color: var(--dark-house-over);
+}
+
+.cell::before,
+.cell.odd::before {
+  content: attr(data-letter) attr(data-number);
+  font-size: 1.5rem;
+  font-weight: medium;
+  color: black;
+  opacity: 0.05;
+}
+
+.cell.active.odd::before,
+.active.cell::before {
+  opacity: 0.25;
+}
+
+.cell.odd::before {
+  color: white;
+}
+
+.pieces-container {
+  /* display: flex; */
+  position: absolute;
+  height: 40rem;
+  width: 40rem;
+}
+
+.piece {
+  position: absolute;
+  background-color: transparent;
+  color: #cece5a;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  font-size: 3.5rem;
+  font-weight: bold;
+  box-shadow: 0px 0px 4px 2px #ffe17b00;
+  transition: all ease 0.2s;
+}
+
+.piece img,
+img.white {
+  filter: invert(1);
+}
+
+.piece.black img {
+  filter: invert(0);
+}
+
+.piece:hover {
+  border: none;
+  z-index: 15;
+  box-shadow: 0px 0px 4px 2px #ffe17b;
+}
+
+.piece:focus {
+  background-color: #63833050;
+  z-index: 15;
+  /* box-shadow: 0px 0px 4px 2px #638330; */
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
