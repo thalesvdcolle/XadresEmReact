@@ -1,0 +1,25 @@
+{
+  // Esses Trabalhos Vâo Dar Inicio Ao Seu Projeto Pelo SandBox
+  "setupTasks": [
+    {
+      "name": "Install Dependencies",
+      "command": "yarn install"
+    }
+  ],
+
+  "tasks": {
+    "start": {
+      "name": "start",
+      "command": "yarn start",
+      "runAtStart": true,
+      "preview": {
+        "port": 1234
+      }
+    },
+    "build": {
+      "name": "build",
+      "command": "yarn build",
+      "runAtStart": false
+    }
+  }
+}
