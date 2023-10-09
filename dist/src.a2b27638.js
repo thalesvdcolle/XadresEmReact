@@ -375,6 +375,41 @@ var lShape = function lShape(letterPos, numberPos, type, color) {
   defaultMove();
   defaultMove(true);
 };
+var moveKing = function moveKing(letterPos, numberPos) {
+  var piece = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "king";
+  var color = arguments.length > 3 ? arguments[3] : undefined;
+  var active = {
+    top: true,
+    bottom: true
+  };
+  for (var i = 2; i < _board.lettersData.length - 1; i++) {
+    if (!active.top && !active.bottom) break;
+    if (active.top) active.top = (0, _attachPieceToHouse.default)(_board.lettersData[letterPos + 1], numberPos, piece, color);
+    if (active.bottom) {
+      active.bottom = (0, _attachPieceToHouse.default)(_board.lettersData[letterPos - 1], numberPos, piece, color);
+    }
+  }
+  active.top = true;
+  active.bottom = true;
+  for (var _i3 = 1; _i3 < 2; _i3++) {
+    if (!active.top && !active.bottom) break;
+    if (active.top) active.top = (0, _attachPieceToHouse.default)(_board.lettersData[letterPos], numberPos + _i3, piece, color);
+    if (active.bottom) active.bottom = (0, _attachPieceToHouse.default)(_board.lettersData[letterPos], numberPos - _i3, piece, color);
+  }
+  for (var _i4 = 1; _i4 < _board.lettersData.length - 2; _i4++) {
+    if (!active.top && !active.bottom) break;
+    if (active.top) active.top = (0, _attachPieceToHouse.default)(_board.lettersData[letterPos + 1], numberPos + 1, piece, color);
+    if (active.bottom) active.bottom = (0, _attachPieceToHouse.default)(_board.lettersData[letterPos + 1], numberPos - 1, piece, color);
+  }
+  active.top = true;
+  active.bottom = true;
+  for (var _i5 = letterPos - 1; _i5 >= 0; _i5--) {
+    if (!active.top && !active.bottom) break;
+    if (active.top) active.top = (0, _attachPieceToHouse.default)(_board.lettersData[_i5], numberPos + 1, piece, color);
+    if (active.bottom && numberPos > 1) active.bottom = (0, _attachPieceToHouse.default)(_board.lettersData[_i5], numberPos - 1, piece, color);
+    _i5 = 0;
+  }
+};
 var _default = exports.default = {
   diagonally: diagonally,
   straight: straight,
@@ -383,6 +418,7 @@ var _default = exports.default = {
   bishop: [diagonally],
   knight: [lShape],
   queen: [straight, diagonally],
+  king: [moveKing],
   pawn: [movePawn]
 };
 },{"../../constants/board":"src/constants/board.js","./attachPieceToHouse":"src/utils/helpers/attachPieceToHouse.js","./checkEnemies":"src/utils/helpers/checkEnemies.js"}],"src/components/pieces/Piece.js":[function(require,module,exports) {

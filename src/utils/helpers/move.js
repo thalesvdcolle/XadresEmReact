@@ -32,7 +32,7 @@ const diagonally = (letterPos, numberPos, piece = "bishop", color) => {
         lettersData[letterPos + i],
         numberPos + i,
         piece,
-        color
+        color,
       );
 
     if (active.bottom)
@@ -40,7 +40,7 @@ const diagonally = (letterPos, numberPos, piece = "bishop", color) => {
         lettersData[letterPos + i],
         numberPos - i,
         piece,
-        color
+        color,
       );
   }
 
@@ -54,7 +54,7 @@ const diagonally = (letterPos, numberPos, piece = "bishop", color) => {
         lettersData[i],
         numberPos + currentYPos,
         piece,
-        color
+        color,
       );
 
     if (active.bottom && numberPos > 1)
@@ -62,7 +62,7 @@ const diagonally = (letterPos, numberPos, piece = "bishop", color) => {
         lettersData[i],
         numberPos - currentYPos,
         piece,
-        color
+        color,
       );
 
     currentYPos++;
@@ -78,7 +78,7 @@ const straight = (letterPos, numberPos, piece = "rook", color = "white") => {
         lettersData[letterPos + i],
         numberPos,
         piece,
-        color
+        color,
       );
 
     if (active.bottom) {
@@ -86,7 +86,7 @@ const straight = (letterPos, numberPos, piece = "rook", color = "white") => {
         lettersData[letterPos - i],
         numberPos,
         piece,
-        color
+        color,
       );
     }
   }
@@ -101,7 +101,7 @@ const straight = (letterPos, numberPos, piece = "rook", color = "white") => {
         lettersData[letterPos],
         numberPos + 1 + i,
         piece,
-        color
+        color,
       );
 
     if (active.bottom)
@@ -109,7 +109,7 @@ const straight = (letterPos, numberPos, piece = "rook", color = "white") => {
         lettersData[letterPos],
         numberPos - 1 - i,
         piece,
-        color
+        color,
       );
   }
 };
@@ -122,30 +122,116 @@ const lShape = (letterPos, numberPos, type, color) => {
       lettersData[letterPos + 1 * def],
       numberPos + 2,
       "knight",
-      color
+      color,
     );
     attachPieceToHouse(
       lettersData[letterPos + 1 * def],
       numberPos - 2,
       "knight",
-      color
+      color,
     );
     attachPieceToHouse(
       lettersData[letterPos + 2 * def],
       numberPos + 1,
       "knight",
-      color
+      color,
     );
     attachPieceToHouse(
       lettersData[letterPos + 2 * def],
       numberPos - 1,
       "knight",
-      color
+      color,
     );
   };
 
   defaultMove();
   defaultMove(true);
+};
+
+const moveKing = (letterPos, numberPos, piece = "king", color) => {
+  const active = { top: true, bottom: true };
+  for (let i = 2; i < lettersData.length - 1; i++) {
+    if (!active.top && !active.bottom) break;
+    if (active.top)
+      active.top = attachPieceToHouse(
+        lettersData[letterPos + 1],
+        numberPos,
+        piece,
+        color,
+      );
+
+    if (active.bottom) {
+      active.bottom = attachPieceToHouse(
+        lettersData[letterPos - 1],
+        numberPos,
+        piece,
+        color,
+      );
+    }
+  }
+  active.top = true;
+  active.bottom = true;
+
+  for (let i = 1; i < 2; i++) {
+    if (!active.top && !active.bottom) break;
+    if (active.top)
+      active.top = attachPieceToHouse(
+        lettersData[letterPos],
+        numberPos + i,
+        piece,
+        color,
+      );
+
+    if (active.bottom)
+      active.bottom = attachPieceToHouse(
+        lettersData[letterPos],
+        numberPos - i,
+        piece,
+        color,
+      );
+  }
+
+  for (let i = 1; i < lettersData.length - 2; i++) {
+    if (!active.top && !active.bottom) break;
+    if (active.top)
+      active.top = attachPieceToHouse(
+        lettersData[letterPos + 1],
+        numberPos + 1,
+        piece,
+        color,
+      );
+
+    if (active.bottom)
+      active.bottom = attachPieceToHouse(
+        lettersData[letterPos + 1],
+        numberPos - 1,
+        piece,
+        color,
+      );
+  }
+
+  active.top = true;
+  active.bottom = true;
+
+  for (let i = letterPos - 1; i >= 0; i--) {
+    if (!active.top && !active.bottom) break;
+    if (active.top)
+      active.top = attachPieceToHouse(
+        lettersData[i],
+        numberPos + 1,
+        piece,
+        color,
+      );
+
+    if (active.bottom && numberPos > 1)
+      active.bottom = attachPieceToHouse(
+        lettersData[i],
+        numberPos - 1,
+        piece,
+        color,
+      );
+    i = 0;
+  }
 };
 
 export default {
@@ -156,5 +242,6 @@ export default {
   bishop: [diagonally],
   knight: [lShape],
   queen: [straight, diagonally],
-  pawn: [movePawn]
+  king: [moveKing],
+  pawn: [movePawn],
 };
